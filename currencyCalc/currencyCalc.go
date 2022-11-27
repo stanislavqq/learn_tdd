@@ -1,26 +1,35 @@
 package currencyCalc
 
-import "reflect"
-
-//type Currency interface {
-//	GetAmount() int
-//	Equals(currency Currency) bool
-//	Times(amount int) Currency
-//}
+type Currency interface {
+	GetAmount() int
+	Equals(currency Currency) bool
+	Times(amount int) Currency
+	Currency() string
+}
 
 type Money struct {
-	Type   interface{}
 	amount int
 }
 
-func (m *Money) Equals(money Money) bool {
-	return m.amount == money.amount && reflect.TypeOf(money) == reflect.TypeOf(m)
+func NewMoney(amount int, currency string) Currency {
+	switch currency {
+	case "USD":
+		return NewDollar(amount)
+	case "CHF":
+		return NewFranc(amount)
+	}
+
+	return nil
 }
 
-func (m *Money) GetAmount() int {
-	return m.amount
+func NewDollar(amount int) Currency {
+	return &Dollar{amount: amount, currency: "USD"}
 }
 
-func (m *Money) Times(amount int) Money {
-	return Money{Type: m.Type, amount: amount}
+func NewFranc(amount int) Currency {
+	return &Franc{amount: amount, currency: "CHF"}
+}
+
+func (c *Money) GetAmount() int {
+	return c.amount
 }

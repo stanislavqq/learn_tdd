@@ -3,22 +3,27 @@ package currencyCalc
 import "reflect"
 
 type Dollar struct {
-	amount int
+	Money
+	amount   int
+	currency string
 }
 
-func NewDollar(amount int) Money {
-	dollar := Dollar{amount: amount}
-	return Money{Type: dollar, amount: amount}
-}
+//func NewDollar(amount int) Currency {
+//	return &Dollar{amount: amount}
+//}
 
-func (d *Dollar) Times(count int) Money {
+func (d *Dollar) Times(count int) Currency {
 	return NewDollar(d.amount * count)
 }
 
-func (d *Dollar) Equals(currency Money) bool {
-	return d.amount == currency.GetAmount() && reflect.TypeOf(currency) == reflect.TypeOf(d)
+func (d *Dollar) Equals(currency Currency) bool {
+	return d.amount == currency.GetAmount() && (reflect.TypeOf(d) == reflect.TypeOf(currency))
 }
 
 func (d *Dollar) GetAmount() int {
 	return d.amount
+}
+
+func (d *Dollar) Currency() string {
+	return "USD"
 }
